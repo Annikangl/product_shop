@@ -29,7 +29,7 @@ class TelegramLoggerHandler extends AbstractProcessingHandler
         try {
             TelegramBotApi::sendMessage($this->chatId, $this->token, $record['formatted']);
         } catch (HttpClientException $exception) {
-            dd($exception);
+            echo $exception->getMessage();
         }
 
     }

@@ -11,6 +11,9 @@ class TelegramBotApi
 {
     public const HOST = 'https://api.telegram.org/bot/';
 
+    /**
+     * @throws HttpClientException
+     */
     public static function sendMessage(int $chatId, string $token, string $text): bool
     {
         $response = Http::get(self::HOST . $token . '/sendMessage', [
@@ -19,7 +22,7 @@ class TelegramBotApi
         ]);
 
         if (!$response->json('ok')) {
-            throw new HttpClientException('Can`t send message to telegram');
+            throw new HttpClientException($response->body());
         }
 
         return true;
