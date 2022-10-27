@@ -17,11 +17,32 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::controller(AuthController::class)->group(function () {
-    Route::get('/login', 'loginForm')->name('login');
-    Route::get('/register', 'registerForm')->name('register');
+    Route::get('/login', 'loginForm')->name('login.form');
+    Route::post('/login', 'login')->name('login');
+
+    Route::get('/register', 'registerForm')->name('register.form');
+    Route::post('/register', 'register')->name('register');
+
+    Route::delete('/logout', 'logout')->name('logout');
+
+    Route::get('/forgot-password', 'forgot')
+        ->middleware('guest')
+        ->name('password.request');
+
+    Route::post('/forgot-password', 'forgotPassword')
+        ->middleware('guest')
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', 'reset')
+        ->middleware('guest')
+        ->name('password.reset');
+
+    Route::post('/reset-password', 'resetPassword')
+        ->middleware('guest')
+        ->name('password.update');
 });
 
-Route::get('/', [HomeController::class])->name('home');
+Route::get('/', HomeController::class)->name('home');
 
 
 

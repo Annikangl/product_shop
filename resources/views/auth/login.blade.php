@@ -6,14 +6,20 @@
     <main class="md:min-h-screen md:flex md:items-center md:justify-center py-16 lg:py-20">
         <div class="container">
 
-            <x-forms.auth-form title="Вход в аккаунт" action="">
+            <x-forms.auth-form
+                title="Вход в аккаунт"
+                action="{{ route('login') }}"
+                method="post"
+            >
+
                 @csrf
 
                 <x-forms.text-input
-                    namme="email"
+                    name="email"
                     type="email"
                     :isError=" $errors->has('email')"
                     placeholder="E-mail"
+                    value="{{ old('email') }}"
                     required="true">
                 </x-forms.text-input>
 
@@ -22,7 +28,7 @@
                 @enderror
 
                 <x-forms.text-input
-                    namme="password"
+                    name="password"
                     type="password"
                     :isError=" $errors->has('email')"
                     placeholder="Пароль"
@@ -48,7 +54,7 @@
 
                 <x:slot:buttons>
                     <div class="space-y-3 mt-5">
-                        <div class="text-xxs md:text-xs"><a href="lost-password.html"
+                        <div class="text-xxs md:text-xs"><a href="{{ route('password.request') }}"
                                                             class="text-white hover:text-white/70 font-bold">Забыли пароль?</a>
                         </div>
                         <div class="text-xxs md:text-xs"><a href="{{ route('register') }}"
