@@ -18,10 +18,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'loginForm')->name('login.form');
-    Route::post('/login', 'login')->name('login');
+
+    Route::post('/login', 'login')
+        ->middleware('throttle:auth')
+        ->name('login');
 
     Route::get('/register', 'registerForm')->name('register.form');
-    Route::post('/register', 'register')->name('register');
+
+    Route::post('/register', 'register')
+        ->middleware('throttle:auth')
+        ->name('register');
 
     Route::delete('/logout', 'logout')->name('logout');
 

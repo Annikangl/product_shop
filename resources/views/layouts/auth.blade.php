@@ -11,16 +11,18 @@
 </head>
 <body class="antialiased">
 
-@if (session()->has('message'))
-    {{ session('message') }}
+@if($message = flash()->get())
+    <div class="{{ $message->class() }} p-5">
+        {{ $message->message() }}
+    </div>
 @endif
 <!-- Page heading -->
-<div class="text-center">
-    <a href="index.html" class="inline-block" rel="home">
-        <img src="{{ \Illuminate\Support\Facades\Vite::image('logo.svg') }}"
-             class="w-[148px] md:w-[201px] h-[36px] md:h-[50px]" alt="CutCode">
-    </a>
-</div>
+{{--<div class="text-center">--}}
+{{--    <a href="index.html" class="inline-block" rel="home">--}}
+{{--        <img src="{{ \Illuminate\Support\Facades\Vite::image('logo.svg') }}"--}}
+{{--             class="w-[148px] md:w-[201px] h-[36px] md:h-[50px]" alt="CutCode">--}}
+{{--    </a>--}}
+{{--</div>--}}
     @yield('content')
 </body>
 </html>
