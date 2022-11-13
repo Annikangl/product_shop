@@ -3,7 +3,6 @@
 namespace Tests\Feature\App\Http\Controllers;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
 use App\Listeners\SendEmailNewUserListener;
 use App\Models\User;
 use App\Notifications\NewUserNotification;
@@ -17,6 +16,22 @@ use Tests\TestCase;
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_login_page_success(): void
+    {
+        $this->get(action([AuthController::class, 'loginForm']))
+            ->assertOk()
+            ->assertSee('Вход в аккаунт')
+            ->assertViewIs('auth.login');
+    }
+
+    public function test_register_page_success(): void
+    {
+        $this->get(action([AuthController::class, 'registerForm']))
+            ->assertOk()
+            ->assertSee('Регистрация')
+            ->assertViewIs('auth.register');
+    }
 
     public function test_is_register_success(): void
     {
@@ -62,4 +77,46 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect(route('home'));
     }
+
+    public function test_is_login_success()
+    {
+        $this->withoutMiddleware();
+
+        $password = 'test1234';
+
+        $user = User::factory()->create([
+            'email' => 'test_test@ex.com',
+            'password' => bcrypt($password)
+        ]);
+
+        $request = [
+            'email' => $user->email,
+            'password' => $password
+        ];
+
+        $response = $this->post(
+            action([AuthController::class, 'login']),
+            $request
+        );
+
+        $response->assertValid();
+
+        // TODO error on redirect
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_logout_success()
+    {
+        $user = User::factory()->create([
+            'email' => 'test_test@ex.com',
+        ]);
+
+        $this->actingAs($user)
+            ->delete(action([AuthController::class, 'logout']));
+
+        $this->assertGuest();
+    }
+
+
 }
